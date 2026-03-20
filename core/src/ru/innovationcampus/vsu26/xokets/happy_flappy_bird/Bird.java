@@ -1,47 +1,32 @@
 package ru.innovationcampus.vsu26.xokets.happy_flappy_bird;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 public class Bird {
     private int x;
     private int y;
+    private int speed;
     private Texture texture;
 
-    public Bird(int x, int y) {
+    public Bird(int x, int y, int speed) {
         this.x = x;
         this.y = y;
+        this.speed = speed;
         this.texture = new Texture("bird0.png");
     }
 
     public Bird() {
-        this(0, 0);
+        this(0, 0, 1);
     }
 
-    public int getX() {
-        return x;
+    public void fly() {
+        x += speed;
+        y += speed;
     }
 
-    public int getY() {
-        return y;
-    }
-
-    public Texture getTexture() {
-        return texture;
-    }
-
-    public void moveX(int num) {
-        if (num < 0) {
-            x = 0;
-            return;
-        }
-        x += num;
-    }
-    public void moveY(int num) {
-        if (num < 0) {
-            y = 0;
-            return;
-        }
-        y += num;
+    public void draw(Batch batch) {
+        batch.draw(texture, x, y);
     }
 
     public void dispose() {
