@@ -11,17 +11,21 @@ import java.io.InputStream;
 
 
 public class MyGdxGame extends Game {
-	public static final float G = 9.8f;
+	public static final String GAME_DIRECTORY_NAME = "HappyFlappyBird";
+	public static final String GAME_CONFIG_NAME = "options.txt";
+	public static final float G = 0.5f;
 	public static final int DEFAULT_FPS = 60;
-	public static int fps;
+	public int fps;
 	public static final int SCR_WIDTH = 1280;
 	public static final int SCR_HEIGHT = 720;
+
+	public File gameConfig;
 	protected SpriteBatch batch;
 	protected OrthographicCamera camera;
 	protected ScreenGame screenGame;
 
 	@Override
-	public void create () {
+	public void create() {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCR_WIDTH, SCR_HEIGHT);
@@ -36,24 +40,31 @@ public class MyGdxGame extends Game {
 		batch.dispose();
 	}
 
-	public static float convertTime(int t) {
-		return (float) t / fps;
-	}
+	public void createConfigFile() {
+		File gameDirectory;
+		if (System.getProperty("os.name").toLowerCase().contains("win")) {
+			File appdata = new File(System.getenv("APPDATA"));
+			gameDirectory = new File(appdata, GAME_DIRECTORY_NAME);
 
-	public static File getConfigFile() {
-		File gameConfig = new File("options.txt");
-		if (!gameConfig.exists()) {
+		} else {
+			File config = new File(System.getProperty("user.home") + "/.config");
+			gameDirectory = new File(config, GAME_DIRECTORY_NAME);
+		}
+		if (!gameDirectory.exists()) {
+			gameDirectory.mkdir();
+		}
+		gameConfig = new File(gameDirectory, GAME_CONFIG_NAME);
+		if (gameConfig.exists()) {
 			try {
 				gameConfig.createNewFile();
 			} catch (IOException e) {
 				System.out.println("Не удалось создать файл настроек");
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 		}
-		return gameConfig;
 	}
 
-	public static void applyConfig(File gameConfig) {
+	public void applyGameConfig() {
 		try (InputStream inputStream = new FileInputStream(gameConfig)) {
 			byte[] array = new byte[1024];
 			int count = inputStream.read(array);

@@ -15,7 +15,6 @@ public class ScreenGame implements Screen {
     public ScreenGame(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
         bird = new Bird();
-        lastTime = System.currentTimeMillis();
     }
 
     @Override
@@ -23,14 +22,7 @@ public class ScreenGame implements Screen {
         if (Gdx.input.justTouched()) {
             bird.onClick();
         }
-
-        long  currentTime = System.currentTimeMillis();
-
-        long dt = currentTime - lastTime;
-
         bird.fly();
-        lastTime = currentTime;
-
 
         ScreenUtils.clear(1, 0, 0, 1);
         myGdxGame.camera.update();

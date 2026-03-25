@@ -1,57 +1,55 @@
 package ru.innovationcampus.vsu26.xokets.happy_flappy_bird;
 
-import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame.convertTime;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-public class Bird {
-    public static final int MAX_HEIGHT = 200;
-    private static final int START_JUMP_SPEED = 2;
-    private int x;
-    private int y;
-    private double vy;
-    private int timeFromStart = 0;
-    private int speed;
-    private Texture texture;
-    private boolean isJumping;
-    private int maxHeight;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Bird(int x, int y, int speed) {
-        this.x = x;
+import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.utils.FrameCounter;
+
+public class Bird {
+    private static final float JUMP_FORCE = 10f;
+    private static final String BIRD_TILES_PATH = "BirdTiles/";
+    private FrameCounter frameCounter;
+
+    private final List<Texture> birdTiles = new ArrayList<>();
+    private final float x;
+    private float y;
+    private float vy;
+    private Texture texture;
+
+    public Bird(int y) {
+        this.x = 200;
         this.y = y;
-        this.speed = speed;
-        this.texture = new Texture("bird0.png");
+        texture = new Texture(BIRD_TILES_PATH + "bird0.png");
+        birdTiles.add(texture);
+        birdTiles.add(new Texture(BIRD_TILES_PATH + "bird1.png"));
+        birdTiles.add(new Texture(BIRD_TILES_PATH + "bird2.png"));
+        frameCounter = new FrameCounter(birdTiles.size() - 1, 3);
     }
 
     public Bird() {
-        this(0, 500, 5);
+        this(500);
     }
 
     public void fly() {
-        timeFromStart++;
-        x += 0*speed;
-        if (y > maxHeight) {
-            timeFromStart = 0;
-            isJumping = false;
+        if (vy > 0) {
+            frameCounter.nextFrame();
         }
-        y += vy * convertTime(timeFromStart) - (MyGdxGame.G + (convertTime(timeFromStart) * convertTime(timeFromStart) / 2));
-        vy += -MyGdxGame.G*convertTime(timeFromStart);
-        if (isJumping) {
-            vy = START_JUMP_SPEED * 10;
-            //y += START_JUMP_SPEED * convertTime(timeFromStart) - (MyGdxGame.G + (convertTime(timeFromStart) * convertTime(timeFromStart) / 2));
-            return;
-        }
-        //y -= MyGdxGame.G + (convertTime(timeFromStart) * convertTime(timeFromStart) / 2);
-
+        vy -= MyGdxGame.G;
+        y += vy;
     }
 
     public void onClick() {
-        isJumping = true;
-        maxHeight = y + MAX_HEIGHT;
+        if (vy < 0) {
+            vy = JUMP_FORCE;
+        }
     }
 
     public void draw(Batch batch) {
+        if (frameCounter.getFrame() != 0) frameCounter.nextFrame();
+        texture = birdTiles.get(frameCounter.getFrame());
         batch.draw(texture, x, y);
     }
 
