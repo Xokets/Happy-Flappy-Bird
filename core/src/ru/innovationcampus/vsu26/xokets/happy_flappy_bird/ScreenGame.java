@@ -54,5 +54,6 @@ public class ScreenGame implements Screen {
 
     @Override
     public void dispose() {
+        bird.dispose();
     }
 }

@@ -13,7 +13,7 @@ import java.io.InputStream;
 public class MyGdxGame extends Game {
 	public static final String GAME_DIRECTORY_NAME = "HappyFlappyBird";
 	public static final String GAME_CONFIG_NAME = "options.txt";
-	public static final float G = 0.5f;
+	public static final float G = 0.3f;
 	public static final int DEFAULT_FPS = 60;
 	public int fps;
 	public static final int SCR_WIDTH = 1280;
@@ -38,6 +38,7 @@ public class MyGdxGame extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
+		screenGame.dispose();
 	}
 
 	public void createConfigFile() {
