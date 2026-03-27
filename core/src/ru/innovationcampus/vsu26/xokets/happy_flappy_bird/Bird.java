@@ -10,7 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.utils.FrameCounter;
 
 public class Bird {
-    private static final float JUMP_FORCE = 10.5f;
+    public static final float BIRD_X_POS = 300;
+    private static final float JUMP_FORCE = 5.5f;
     private static final String BIRD_TILES_PATH = "BirdTiles/";
     private final AtomicInteger time = new AtomicInteger(1);
     private final Runnable taskTimer = () -> {
@@ -19,7 +20,7 @@ public class Bird {
                 break;
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -35,7 +36,7 @@ public class Bird {
     private final Thread timerThread;
 
     public Bird(int y) {
-        this.x = 200;
+        this.x = BIRD_X_POS;
         this.y = y;
         texture = new Texture(BIRD_TILES_PATH + "bird0.png");
         birdTiles.add(texture);
@@ -54,7 +55,7 @@ public class Bird {
         if (vy > 0) {
             frameCounter.nextFrame();
         }
-        vy -= time.get() * MyGdxGame.G;
+        vy -= ((float) time.get() / 1000) * MyGdxGame.G;
         y += vy;
     }
 
@@ -68,7 +69,7 @@ public class Bird {
     public void draw(Batch batch) {
         if (frameCounter.getFrame() != 0) frameCounter.nextFrame();
         texture = birdTiles.get(frameCounter.getFrame());
-        batch.draw(texture, x, y);
+        batch.draw(texture, x, y, 250,200);
     }
 
     public void dispose() {

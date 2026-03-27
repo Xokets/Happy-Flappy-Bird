@@ -13,7 +13,7 @@ import java.io.InputStream;
 public class MyGdxGame extends Game {
 	public static final String GAME_DIRECTORY_NAME = "HappyFlappyBird";
 	public static final String GAME_CONFIG_NAME = "options.txt";
-	public static final float G = 0.3f;
+	public static final float G = 1.5f;
 	public static final int DEFAULT_FPS = 60;
 	public int fps;
 	public static final int SCR_WIDTH = 1280;
@@ -55,7 +55,7 @@ public class MyGdxGame extends Game {
 			gameDirectory.mkdir();
 		}
 		gameConfig = new File(gameDirectory, GAME_CONFIG_NAME);
-		if (gameConfig.exists()) {
+		if (!gameConfig.exists()) {
 			try {
 				gameConfig.createNewFile();
 			} catch (IOException e) {
