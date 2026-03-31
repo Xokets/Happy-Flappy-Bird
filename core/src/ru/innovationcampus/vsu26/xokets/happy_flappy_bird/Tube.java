@@ -2,6 +2,7 @@ package ru.innovationcampus.vsu26.xokets.happy_flappy_bird;
 
 import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame.SCR_HEIGHT;
 import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame.SCR_WIDTH;
+import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.ScreenGame.FIXED_TIME_STEP;
 import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.ScreenGame.SPEED_X;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -18,34 +19,42 @@ public class Tube {
     private float x;
     private int width;
     private int height;
-    private int count;
-    private int distanceBetweenTubes;
+    private float distanceBetweenTubes;
     private float gapY;
     private int gapHeight;
+    private float accumulator;
 
     public Tube(int tubeCount, int tubeIdx) {
-        count = 1;
-        gapHeight = 400;
+        int id = tubeIdx + 1;
+        gapHeight = 408;
         gapY = (float) gapHeight / 2 + PADDING + rand.nextInt(SCR_HEIGHT - 2 * (PADDING + gapHeight / 2));
-        distanceBetweenTubes = SCR_WIDTH + width / tubeCount;
-        x = distanceBetweenTubes * tubeIdx + SCR_WIDTH;
+        distanceBetweenTubes = SCR_WIDTH + (float)  width / tubeCount;
+        x = distanceBetweenTubes * id + SCR_WIDTH;
         width = 200;
         height = 700;
         this.textureUpperTube = new Texture(TEXTURE_PATH + "tube_flipped.png");
         this.textureDownTube = new Texture(TEXTURE_PATH + "tube.png");
+        accumulator = 0;
     }
-    public void move() {
-        x -= SPEED_X;
-        if (x < -width) {
-            x = SCR_WIDTH + distanceBetweenTubes;
-            gapY = (float) gapHeight / 2 + PADDING + rand.nextInt(SCR_HEIGHT - 2 * (PADDING + gapHeight / 2));
+    public void move(float delta) {
+        accumulator += delta;
+        while (accumulator >= FIXED_TIME_STEP) {
+            x -= SPEED_X;
+            if (x < -width) {
+                x = distanceBetweenTubes;
+                gapY = (float) gapHeight / 2 + PADDING + rand.nextInt(SCR_HEIGHT - 2 * (PADDING + gapHeight / 2));
+            }
+            accumulator -= FIXED_TIME_STEP;
         }
+    }
+
+    public boolean isHit(Bird bird) {
+        return bird.getX() + bird.getWidth() >= x && bird.getX() <= x + width && (bird.getY() <= gapY - (float) gapHeight / 2 || bird.getY() + bird.getHeight() >= gapY + (float) gapHeight / 2);
     }
 
     public void draw(SpriteBatch batch) {
         batch.draw(textureUpperTube, x, gapY + ((float) gapHeight / 2), width, height);
         batch.draw(textureDownTube, x, gapY - ((float) gapHeight * 2), width, height);
-        count++;
     }
 
     public void dispose() {

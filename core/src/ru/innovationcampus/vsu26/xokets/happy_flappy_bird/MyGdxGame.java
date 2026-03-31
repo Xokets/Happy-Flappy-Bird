@@ -13,7 +13,7 @@ import java.io.InputStream;
 public class MyGdxGame extends Game {
 	public static final String GAME_DIRECTORY_NAME = "HappyFlappyBird";
 	public static final String GAME_CONFIG_NAME = "options.txt";
-	public static final float G = 1.5f;
+	public static final float G = 1.2f;
 	public static final int DEFAULT_FPS = 60;
 	public int fps;
 	public static final int SCR_WIDTH = 1280;
@@ -29,7 +29,6 @@ public class MyGdxGame extends Game {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCR_WIDTH, SCR_HEIGHT);
-
 
 		screenGame = new ScreenGame(this);
 		setScreen(screenGame);
