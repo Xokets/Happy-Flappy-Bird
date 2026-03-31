@@ -23,25 +23,28 @@ public class Tube {
     private float gapY;
     private int gapHeight;
     private float accumulator;
+    private boolean isPointReceived;
 
     public Tube(int tubeCount, int tubeIdx) {
         int id = tubeIdx + 1;
         gapHeight = 408;
         gapY = (float) gapHeight / 2 + PADDING + rand.nextInt(SCR_HEIGHT - 2 * (PADDING + gapHeight / 2));
-        distanceBetweenTubes = SCR_WIDTH + (float)  width / tubeCount;
+        distanceBetweenTubes = (SCR_WIDTH + (float)  width) / (tubeCount - 1);
         x = distanceBetweenTubes * id + SCR_WIDTH;
         width = 200;
         height = 700;
         this.textureUpperTube = new Texture(TEXTURE_PATH + "tube_flipped.png");
         this.textureDownTube = new Texture(TEXTURE_PATH + "tube.png");
         accumulator = 0;
+        isPointReceived = false;
     }
     public void move(float delta) {
         accumulator += delta;
         while (accumulator >= FIXED_TIME_STEP) {
             x -= SPEED_X;
             if (x < -width) {
-                x = distanceBetweenTubes;
+                isPointReceived = false;
+                x = SCR_WIDTH + distanceBetweenTubes;
                 gapY = (float) gapHeight / 2 + PADDING + rand.nextInt(SCR_HEIGHT - 2 * (PADDING + gapHeight / 2));
             }
             accumulator -= FIXED_TIME_STEP;
@@ -60,5 +63,12 @@ public class Tube {
     public void dispose() {
         textureUpperTube.dispose();
         textureDownTube.dispose();
+    }
+    public boolean needAddPoint(Bird bird) {
+        if (bird.getX() > x + width && !isPointReceived) {
+            isPointReceived = true;
+            return true;
+        }
+        return false;
     }
 }
