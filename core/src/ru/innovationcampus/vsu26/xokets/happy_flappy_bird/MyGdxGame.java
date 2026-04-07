@@ -15,6 +15,7 @@ import java.io.InputStream;
 
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.screens.ScreenGame;
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.screens.ScreenMenu;
+import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.screens.ScreenParts;
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.screens.ScreenRestart;
 
 
@@ -27,6 +28,7 @@ public class MyGdxGame extends Game {
 	public ScreenGame screenGame;
 	public ScreenRestart screenRestart;
 	public ScreenMenu screenMenu;
+	public ScreenParts screenParts;
 
 	@Override
 	public void create() {
@@ -38,6 +40,7 @@ public class MyGdxGame extends Game {
 		screenMenu = new ScreenMenu(this);
 		screenGame = new ScreenGame(this);
 		screenRestart = new ScreenRestart(this);
+		screenParts = new ScreenParts(this);
 		setScreen(screenMenu);
 	}
 	
@@ -47,5 +50,6 @@ public class MyGdxGame extends Game {
 		screenGame.dispose();
 		screenRestart.dispose();
 		screenMenu.dispose();
+		screenParts.dispose();
 	}
 }

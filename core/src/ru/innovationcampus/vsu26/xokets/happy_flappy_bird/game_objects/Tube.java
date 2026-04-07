@@ -33,8 +33,8 @@ public class Tube {
         x = distanceBetweenTubes * id + SCR_WIDTH;
         width = 200;
         height = 700;
-        this.textureUpperTube = new Texture(TEXTURE_PATH + "Tube_flipped.png");
-        this.textureDownTube = new Texture(TEXTURE_PATH + "Tube.png");
+        this.textureUpperTube = new Texture(TEXTURE_PATH + "tube_flipped.png");
+        this.textureDownTube = new Texture(TEXTURE_PATH + "tube.png");
         accumulator = 0;
         isPointReceived = false;
     }

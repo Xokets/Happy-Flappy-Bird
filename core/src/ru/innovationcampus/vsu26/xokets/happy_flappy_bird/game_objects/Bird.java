@@ -38,9 +38,9 @@ public class Bird {
         this.height = 150;
         texture = new Texture(TEXTURE_PATH + "Bird0001.png");
         birdTiles.add(texture);
-        birdTiles.add(new Texture(TEXTURE_PATH + "bird0002.png"));
-        birdTiles.add(new Texture(TEXTURE_PATH + "bird0003.png"));
-        birdTiles.add(new Texture(TEXTURE_PATH + "bird0004.png"));
+        birdTiles.add(new Texture(TEXTURE_PATH + "Bird0002.png"));
+        birdTiles.add(new Texture(TEXTURE_PATH + "Bird0003.png"));
+        birdTiles.add(new Texture(TEXTURE_PATH + "Bird0004.png"));
         birdEyeTiles.add(new Texture(TEXTURE_PATH + "eye0001.png"));
         birdEyeTiles.add(new Texture(TEXTURE_PATH + "eye0002.png"));
         birdEyeTiles.add(new Texture(TEXTURE_PATH + "eye0003.png"));
