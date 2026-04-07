@@ -1,9 +1,9 @@
-package ru.innovationcampus.vsu26.xokets.happy_flappy_bird;
+package ru.innovationcampus.vsu26.xokets.happy_flappy_bird.game_objects;
 
 import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame.SCR_HEIGHT;
 import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame.SCR_WIDTH;
-import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.ScreenGame.FIXED_TIME_STEP;
-import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.ScreenGame.SPEED_X;
+import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.screens.ScreenGame.FIXED_TIME_STEP;
+import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.screens.ScreenGame.SPEED_X;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,14 +27,14 @@ public class Tube {
 
     public Tube(int tubeCount, int tubeIdx) {
         int id = tubeIdx + 1;
-        gapHeight = 408;
+        gapHeight = 410;
         gapY = (float) gapHeight / 2 + PADDING + rand.nextInt(SCR_HEIGHT - 2 * (PADDING + gapHeight / 2));
         distanceBetweenTubes = (SCR_WIDTH + (float)  width) / (tubeCount - 1);
         x = distanceBetweenTubes * id + SCR_WIDTH;
         width = 200;
         height = 700;
-        this.textureUpperTube = new Texture(TEXTURE_PATH + "tube_flipped.png");
-        this.textureDownTube = new Texture(TEXTURE_PATH + "tube.png");
+        this.textureUpperTube = new Texture(TEXTURE_PATH + "Tube_flipped.png");
+        this.textureDownTube = new Texture(TEXTURE_PATH + "Tube.png");
         accumulator = 0;
         isPointReceived = false;
     }

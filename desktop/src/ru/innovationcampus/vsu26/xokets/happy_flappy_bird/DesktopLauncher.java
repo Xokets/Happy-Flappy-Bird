@@ -8,12 +8,10 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 public class DesktopLauncher {
 	public static void main (String... args) {
 		final MyGdxGame myGdxGame = new MyGdxGame();
-		myGdxGame.createConfigFile();
-		myGdxGame.applyGameConfig();
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setForegroundFPS(myGdxGame.fps);
 		config.setTitle("Happy Flappy bird");
 		config.setWindowedMode(MyGdxGame.SCR_WIDTH, MyGdxGame.SCR_HEIGHT);
+		config.useVsync(true);
 		new Lwjgl3Application(myGdxGame, config);
 	}
 }

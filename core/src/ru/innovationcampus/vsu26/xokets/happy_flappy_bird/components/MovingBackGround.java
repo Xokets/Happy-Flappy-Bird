@@ -1,8 +1,8 @@
-package ru.innovationcampus.vsu26.xokets.happy_flappy_bird;
+package ru.innovationcampus.vsu26.xokets.happy_flappy_bird.components;
 
 import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame.SCR_HEIGHT;
 import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame.SCR_WIDTH;
-import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.ScreenGame.FIXED_TIME_STEP;
+import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.screens.ScreenGame.FIXED_TIME_STEP;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,12 +14,12 @@ public class MovingBackGround {
     private int speed;
     private float accumulator;
     private float texture1X, texture2X;
-    public MovingBackGround() {
+    public MovingBackGround(String fileName) {
         texture1X = 0;
         texture2X = SCR_WIDTH;
         speed = BACKGROUND_SPEED;
         accumulator = 0;
-        texture = new Texture(TEXTURE_PATH + "game_bg.png");
+        texture = new Texture(TEXTURE_PATH + fileName);
     }
     public void move(float delta) {
         accumulator += delta;
@@ -41,6 +41,10 @@ public class MovingBackGround {
     public void draw(SpriteBatch batch) {
         batch.draw(texture, texture1X, 0, SCR_WIDTH, SCR_HEIGHT);
         batch.draw(texture, texture2X, 0, SCR_WIDTH, SCR_HEIGHT);
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     public void dispose() {
