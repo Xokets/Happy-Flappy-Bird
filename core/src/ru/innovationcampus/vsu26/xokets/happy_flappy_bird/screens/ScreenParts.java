@@ -5,9 +5,11 @@ import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame.SCR_H
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame;
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.components.MovingBackGround;
@@ -18,30 +20,48 @@ public class ScreenParts implements Screen {
     private final MyGdxGame myGdxGame;
 
     private MovingBackGround backGround;
-    private final PartIcon headPartPilotHat = new PartIcon(TEXTURE_PATH + "Head_Part_PilotHat.png");
-    private final PartIcon headPartSunglasses = new PartIcon(TEXTURE_PATH + "Head_Part_Sunglasses.png");
+    private final List<PartIcon> parts = new ArrayList<>();
+    private final PartIcon partHeadPilotHat = new PartIcon(TEXTURE_PATH + "Part_Head_PilotHat.png");
+    private final PartIcon partHeadSunglasses = new PartIcon(TEXTURE_PATH + "Part_Head_Sunglasses.png");
+    private final PartIcon partHeadCap = new PartIcon(TEXTURE_PATH + "Part_Head_Cap.png");
 
     public ScreenParts(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
         backGround = new MovingBackGround("restart_bg.png");
+        parts.add(partHeadPilotHat); parts.add(partHeadSunglasses); parts.add(partHeadCap);
+        for (int i = 0; i < parts.size(); i++) {
+            parts.get(i).setWidth(128);
+            parts.get(i).setHeight(128);
+            if (i > 0) {
+                parts.get(i).setX(parts.get(i - 1).getX() + 138);
+            } else {
+                parts.get(i).setX(138);
+            }
+            parts.get(i).setY((SCR_HEIGHT - 138));
+        }
     }
 
     @Override
     public void show() {
-        headPartPilotHat.setHeight(64); headPartPilotHat.setWidth(64);
-        headPartSunglasses.setHeight(32); headPartSunglasses.setWidth(64);
-        headPartPilotHat.setX(0 + headPartPilotHat.getWidth() + 10);
-        headPartPilotHat.setY(SCR_HEIGHT - headPartPilotHat.getHeight() - 10);
-        headPartSunglasses.setX(headPartPilotHat.getX() + headPartPilotHat.getWidth() + headPartPilotHat.getWidth() + 10);
-        headPartSunglasses.setY(headPartPilotHat.getY());
+//        partHeadPilotHat.setX(0 + partHeadPilotHat.getWidth() + 10);
+//        partHeadPilotHat.setY(SCR_HEIGHT - partHeadPilotHat.getHeight() - 10);
+//        partHeadSunglasses.setX(partHeadPilotHat.getX() + partHeadPilotHat.getWidth() + partHeadPilotHat.getWidth() + 10);
+//        partHeadSunglasses.setY(partHeadPilotHat.getY());
     }
 
     @Override
     public void render(float delta) {
         if (Gdx.input.justTouched()) {
             Vector3 touched = myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-            if (headPartPilotHat.isTouched((int) touched.x, (int) touched.y)) {
-                System.out.println("Selected");
+            if (partHeadPilotHat.isTouched((int) touched.x, (int) touched.y)) {
+                myGdxGame.screenGame.bird.setHeadPart(partHeadPilotHat.getTexture());
+                myGdxGame.setScreen(myGdxGame.screenMenu);
+            } else if (partHeadSunglasses.isTouched((int) touched.x, (int) touched.y)) {
+                myGdxGame.screenGame.bird.setHeadPart(partHeadSunglasses.getTexture());
+                myGdxGame.setScreen(myGdxGame.screenMenu);
+            } else if (partHeadCap.isTouched((int) touched.x, (int) touched.y)) {
+                myGdxGame.screenGame.bird.setHeadPart(partHeadCap.getTexture());
+                myGdxGame.setScreen(myGdxGame.screenMenu);
             }
         }
 
@@ -50,8 +70,9 @@ public class ScreenParts implements Screen {
         myGdxGame.batch.setProjectionMatrix(myGdxGame.camera.combined);
         myGdxGame.batch.begin();
         backGround.draw(myGdxGame.batch);
-        headPartPilotHat.draw(myGdxGame.batch);
-        headPartSunglasses.draw(myGdxGame.batch);
+        partHeadPilotHat.draw(myGdxGame.batch);
+        partHeadSunglasses.draw(myGdxGame.batch);
+        partHeadCap.draw(myGdxGame.batch);
         myGdxGame.batch.end();
     }
 
@@ -78,7 +99,8 @@ public class ScreenParts implements Screen {
     @Override
     public void dispose() {
         backGround.dispose();
-        headPartPilotHat.dispose();
-        headPartSunglasses.dispose();
+        partHeadPilotHat.dispose();
+        partHeadSunglasses.dispose();
+        partHeadCap.dispose();
     }
 }

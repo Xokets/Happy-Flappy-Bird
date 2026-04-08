@@ -14,6 +14,7 @@ import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame;
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.utils.FrameCounter;
 
 public class Bird {
+    private static final int[] HEAD_PART_PIVOT_POINT = {85, 100};
     public static final float X_POS = 300;
     private static final float JUMP_FORCE = 6.1f;
     private static final String TEXTURE_PATH = "BirdTiles/default/";
@@ -22,13 +23,14 @@ public class Bird {
     private FrameCounter eyeFrameCounter;
     private final List<Texture> birdTiles = new ArrayList<>();
     private final List<Texture> birdEyeTiles = new ArrayList<>();
-    private  float x;
+    private float x;
     private float y;
     private int width;
     private int height;
     private float velocityY;
     private Texture texture;
     private float accumulator;
+    private Texture headPart;
     private static final Random rand = new Random();
 
     public Bird(int y) {
@@ -85,10 +87,17 @@ public class Bird {
         texture = birdTiles.get(frameCounter.getFrame());
         batch.draw(texture, X_POS, y, width, height);
         batch.draw(birdEyeTiles.get(eyeFrameCounter.getFrame()), X_POS + width - 85, y + height - 40,(float) width * 0.14f,(float) height * 0.16f);
+        if (headPart != null) {
+            batch.draw(headPart, X_POS + HEAD_PART_PIVOT_POINT[0], y + HEAD_PART_PIVOT_POINT[1], 64, 64);
+        }
     }
 
     public boolean isInField() {
         return !(y + height < 0 || y > SCR_HEIGHT);
+    }
+
+    public void setHeadPart(Texture texture) {
+        headPart = texture;
     }
 
     public void setX(float x) {

@@ -23,8 +23,8 @@ public class ScreenGame implements Screen {
     private final MyGdxGame myGdxGame;
 
 
-    private int point;
-    private boolean isGameOver;
+    public int point;
+    public boolean isGameOver;
     public static final float FIXED_TIME_STEP = 0.0167f;
     public static final int SPEED_X = 10;
     public static final int TUBES_COUNT = 3;
@@ -32,10 +32,10 @@ public class ScreenGame implements Screen {
     private static final int POINT_COUNTER_MARGIN_RIGHT = 400;
     private final List<MovingBackGround> gameBG = new ArrayList<>();
 //    private MovingBackGround backGround;
-    private Bird bird;
-    private Texture sun;
-    private PointCounter pointCounter;
-    private final List<Tube> tubeList = new ArrayList<>();
+    public Bird bird;
+    public Texture sun;
+    public PointCounter pointCounter;
+    public final List<Tube> tubeList = new ArrayList<>();
     public ScreenGame(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
 //        backGround = new MovingBackGround("game_bg.png");
