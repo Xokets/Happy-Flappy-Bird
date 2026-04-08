@@ -46,7 +46,7 @@ public class ScreenGame implements Screen {
         for (int i = 0; i < gameBG.size(); i++) {
             gameBG.get(i).setSpeed(i);
         }
-        bird = new Bird();
+        bird = new Bird(SCR_HEIGHT / 2, myGdxGame);
         sun = new Texture("BackGround/GameBG/Game_BG_Sun1.png");
     }
 
@@ -99,6 +99,11 @@ public class ScreenGame implements Screen {
             pointCounter.draw(myGdxGame.batch, point);
         }
         myGdxGame.batch.end();
+        switch (point) {
+            case 25: myGdxGame.data.putBoolean("has_cap", true); break;
+            case 50: myGdxGame.data.putBoolean("has_pilot_hat", true); break;
+            case 100: myGdxGame.data.putBoolean("has_sunglasses", true); break;
+        }
     }
 
     @Override

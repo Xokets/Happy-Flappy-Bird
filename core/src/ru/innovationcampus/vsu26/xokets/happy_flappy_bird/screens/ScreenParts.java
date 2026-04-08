@@ -5,6 +5,7 @@ import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame.SCR_H
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -12,56 +13,61 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame;
+import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.components.Button;
+import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.components.IconButton;
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.components.MovingBackGround;
-import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.components.PartIcon;
+import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.components.TextButton;
 
 public class ScreenParts implements Screen {
     private static final String TEXTURE_PATH = "Parts/Head/";
     private final MyGdxGame myGdxGame;
 
+    public Texture selected;
+
     private MovingBackGround backGround;
-    private final List<PartIcon> parts = new ArrayList<>();
-    private final PartIcon partHeadPilotHat = new PartIcon(TEXTURE_PATH + "Part_Head_PilotHat.png");
-    private final PartIcon partHeadSunglasses = new PartIcon(TEXTURE_PATH + "Part_Head_Sunglasses.png");
-    private final PartIcon partHeadCap = new PartIcon(TEXTURE_PATH + "Part_Head_Cap.png");
+    private Button menuButton;
+    private final List<IconButton> parts = new ArrayList<>();
+    private final IconButton partHeadPilotHat = new IconButton(0, 0, "Buttons/Button_PartIcon_StateNotSelected.png", "Buttons/Button_PartIcon_StateSelected.png", TEXTURE_PATH + "Part_Head_PilotHat.png");
+    private final IconButton partHeadSunglasses = new IconButton(0, 0, "Buttons/Button_PartIcon_StateNotSelected.png", "Buttons/Button_PartIcon_StateSelected.png", TEXTURE_PATH + "Part_Head_Sunglasses.png");
+    private final IconButton partHeadCap = new IconButton(0, 0, "Buttons/Button_PartIcon_StateNotSelected.png", "Buttons/Button_PartIcon_StateSelected.png", TEXTURE_PATH + "Part_Head_Cap.png");
 
     public ScreenParts(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
         backGround = new MovingBackGround("restart_bg.png");
         parts.add(partHeadPilotHat); parts.add(partHeadSunglasses); parts.add(partHeadCap);
         for (int i = 0; i < parts.size(); i++) {
-            parts.get(i).setWidth(128);
-            parts.get(i).setHeight(128);
             if (i > 0) {
-                parts.get(i).setX(parts.get(i - 1).getX() + 138);
+                parts.get(i).setX(parts.get(i - 1).getX() + parts.get(i - 1).getWidth() + 10);
             } else {
-                parts.get(i).setX(138);
+                parts.get(i).setX(parts.get(i).getWidth());
             }
-            parts.get(i).setY((SCR_HEIGHT - 138));
+            parts.get(i).setY((SCR_HEIGHT - parts.get(i).getHeight() - 10));
         }
+        menuButton = new TextButton("CLOSE");
     }
 
     @Override
     public void show() {
-//        partHeadPilotHat.setX(0 + partHeadPilotHat.getWidth() + 10);
-//        partHeadPilotHat.setY(SCR_HEIGHT - partHeadPilotHat.getHeight() - 10);
-//        partHeadSunglasses.setX(partHeadPilotHat.getX() + partHeadPilotHat.getWidth() + partHeadPilotHat.getWidth() + 10);
-//        partHeadSunglasses.setY(partHeadPilotHat.getY());
+        partHeadPilotHat.setOpen(myGdxGame.hasPilotHat);
+        partHeadSunglasses.setOpen(myGdxGame.hasSunglasses);
+        partHeadCap.setOpen(myGdxGame.hasCap);
     }
 
     @Override
     public void render(float delta) {
         if (Gdx.input.justTouched()) {
             Vector3 touched = myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-            if (partHeadPilotHat.isTouched((int) touched.x, (int) touched.y)) {
-                myGdxGame.screenGame.bird.setHeadPart(partHeadPilotHat.getTexture());
-                myGdxGame.setScreen(myGdxGame.screenMenu);
-            } else if (partHeadSunglasses.isTouched((int) touched.x, (int) touched.y)) {
-                myGdxGame.screenGame.bird.setHeadPart(partHeadSunglasses.getTexture());
-                myGdxGame.setScreen(myGdxGame.screenMenu);
-            } else if (partHeadCap.isTouched((int) touched.x, (int) touched.y)) {
-                myGdxGame.screenGame.bird.setHeadPart(partHeadCap.getTexture());
-                myGdxGame.setScreen(myGdxGame.screenMenu);
+            if (menuButton.isTouch((int) touched.x,(int) touched.y)) myGdxGame.setScreen(myGdxGame.screenMenu);
+            for (IconButton iconButton : parts) {
+                if (!(iconButton.isTouch((int) touched.x, (int) touched.y))) continue;
+                if (!iconButton.isOpen()) continue;
+                if (iconButton.getState()) {
+                    iconButton.switchState();
+                    selected = null;
+                } else if (selected == null){
+                    iconButton.switchState();
+                    selected = iconButton.getIcon();
+                }
             }
         }
 
@@ -73,6 +79,7 @@ public class ScreenParts implements Screen {
         partHeadPilotHat.draw(myGdxGame.batch);
         partHeadSunglasses.draw(myGdxGame.batch);
         partHeadCap.draw(myGdxGame.batch);
+        menuButton.draw(myGdxGame.batch);
         myGdxGame.batch.end();
     }
 
@@ -102,5 +109,6 @@ public class ScreenParts implements Screen {
         partHeadPilotHat.dispose();
         partHeadSunglasses.dispose();
         partHeadCap.dispose();
+        selected.dispose();
     }
 }

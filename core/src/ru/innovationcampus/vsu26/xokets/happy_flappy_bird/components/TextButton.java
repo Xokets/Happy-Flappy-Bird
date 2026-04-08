@@ -7,22 +7,18 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class TextButton {
+public class TextButton extends Button {
     private BitmapFont font;
 
     private String text;
-    private Texture texture;
-    private float x, y;
     private float textX, textY;
-    private float width, height;
     private float textWidth, textHeight;
 
     private static final String TEXTURE_PATH = "Buttons/";
 
     public TextButton(float x, float y, String text) {
+        super(x, y, TEXTURE_PATH + "Text_Button_Texture.png");
         this.text = text;
-        this.x = x;
-        this.y = y;
 
         font = new BitmapFont();
         font.getData().setScale(5f);
@@ -32,41 +28,23 @@ public class TextButton {
         textWidth = gl.width;
         textHeight = gl.height;
 
-        texture = new Texture(TEXTURE_PATH + "Text_Button_Texture.png");
-        width = texture.getWidth();
-        height = texture.getHeight();
-
-        textX = x + (width - textWidth) / 2;
-        textY = y + (height + textHeight) / 2;
+        textX = x + (getWidth() - textWidth) / 2;
+        textY = y + (getHeight() + textHeight) / 2;
     }
     public TextButton(String text) {
         this(0, 0, text);
     }
-
-    public boolean isTouch(int tx, int ty) {
-        return tx >= x && tx <= x + width && ty >= y && ty <= y + height;
-    }
+    @Override
     public void draw(SpriteBatch batch) {
-        batch.draw(texture, x, y, width, height);
+        super.draw(batch);
         font.draw(batch, text, textX, textY);
     }
+    @Override
     public void dispose() {
-        texture.dispose();
+        super.dispose();
         font.dispose();
     }
     public String getText() {
         return text;
-    }
-    public float getX() {
-        return x;
-    }
-    public float getY() {
-        return y;
-    }
-    public float getWidth() {
-        return width;
-    }
-    public float getHeight() {
-        return height;
     }
 }

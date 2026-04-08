@@ -12,6 +12,7 @@ import java.util.Random;
 
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame;
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.utils.FrameCounter;
+import sun.jvm.hotspot.debugger.dummy.DummyDebugger;
 
 public class Bird {
     private static final int[] HEAD_PART_PIVOT_POINT = {85, 100};
@@ -30,10 +31,11 @@ public class Bird {
     private float velocityY;
     private Texture texture;
     private float accumulator;
-    private Texture headPart;
     private static final Random rand = new Random();
+    private final MyGdxGame myGdxGame;
 
-    public Bird(int y) {
+    public Bird(int y, MyGdxGame myGdxGame) {
+        this.myGdxGame = myGdxGame;
         this.y = y;
         this.x = X_POS;
         this.width = 200;
@@ -53,8 +55,8 @@ public class Bird {
         time = 0;
     }
 
-    public Bird() {
-        this(500);
+    public Bird(MyGdxGame myGdxGame) {
+        this(500, myGdxGame);
     }
 
     public void fly(float delta) {
@@ -86,18 +88,14 @@ public class Bird {
         if (velocityY < 0 && frameCounter.getFrame() != 0) frameCounter.previousFrame();
         texture = birdTiles.get(frameCounter.getFrame());
         batch.draw(texture, X_POS, y, width, height);
-        batch.draw(birdEyeTiles.get(eyeFrameCounter.getFrame()), X_POS + width - 85, y + height - 40,(float) width * 0.14f,(float) height * 0.16f);
-        if (headPart != null) {
-            batch.draw(headPart, X_POS + HEAD_PART_PIVOT_POINT[0], y + HEAD_PART_PIVOT_POINT[1], 64, 64);
+        batch.draw(birdEyeTiles.get(eyeFrameCounter.getFrame()), X_POS + width - 85, y + height - 40, (float) width * 0.14f, (float) height * 0.16f);
+        if (myGdxGame.screenParts.selected != null) {
+            batch.draw(myGdxGame.screenParts.selected, X_POS + HEAD_PART_PIVOT_POINT[0], y + HEAD_PART_PIVOT_POINT[1], 64, 64);
         }
     }
 
     public boolean isInField() {
         return !(y + height < 0 || y > SCR_HEIGHT);
-    }
-
-    public void setHeadPart(Texture texture) {
-        headPart = texture;
     }
 
     public void setX(float x) {

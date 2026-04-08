@@ -2,16 +2,10 @@ package ru.innovationcampus.vsu26.xokets.happy_flappy_bird;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.screens.ScreenGame;
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.screens.ScreenMenu;
@@ -20,6 +14,7 @@ import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.screens.ScreenRestart;
 
 
 public class MyGdxGame extends Game {
+	public Preferences data;
 	public static final float G = 1.2f;
 	public static final int SCR_WIDTH = 1280;
 	public static final int SCR_HEIGHT = 720;
@@ -29,11 +24,14 @@ public class MyGdxGame extends Game {
 	public ScreenRestart screenRestart;
 	public ScreenMenu screenMenu;
 	public ScreenParts screenParts;
+	public Boolean hasPilotHat = false;
+	public Boolean hasSunglasses = false;
+	public Boolean hasCap = false;
 
 	@Override
 	public void create() {
-		Preferences prefs = Gdx.app.getPreferences("HappyFlappyBirdData");
-		prefs.flush();
+		data = Gdx.app.getPreferences("HappyFlappyBirdData");
+		applyData();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCR_WIDTH, SCR_HEIGHT);
@@ -51,5 +49,30 @@ public class MyGdxGame extends Game {
 		screenRestart.dispose();
 		screenMenu.dispose();
 		screenParts.dispose();
+	}
+
+	private void applyData() {
+		String pref = "has_pilot_hat";
+		if (!data.contains(pref)) {
+			data.putBoolean(pref, false);
+		}
+		hasPilotHat = data.getBoolean(pref);
+		pref = "has_sunglasses";
+		if (!data.contains(pref)) {
+			data.putBoolean(pref, false);
+		}
+		hasSunglasses = data.getBoolean(pref);
+		pref = "has_cap";
+		if (!data.contains(pref)) {
+			data.putBoolean(pref, false);
+		}
+		hasCap = data.getBoolean(pref);
+		data.flush();
+	}
+
+	@Override
+	public void setScreen(Screen screen) {
+		super.setScreen(screen);
+		applyData();
 	}
 }
