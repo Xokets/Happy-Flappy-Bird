@@ -33,7 +33,7 @@ public class ScreenParts implements Screen {
 
     public ScreenParts(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
-        backGround = new MovingBackGround("restart_bg.png");
+        backGround = new MovingBackGround("Menu_BG.png");
         parts.add(partHeadPilotHat); parts.add(partHeadSunglasses); parts.add(partHeadCap);
         for (int i = 0; i < parts.size(); i++) {
             if (i > 0) {
@@ -109,6 +109,8 @@ public class ScreenParts implements Screen {
         partHeadPilotHat.dispose();
         partHeadSunglasses.dispose();
         partHeadCap.dispose();
-        selected.dispose();
+        if (selected != null) {
+            selected.dispose();
+        }
     }
 }

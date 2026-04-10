@@ -28,7 +28,7 @@ public class ScreenRestart implements Screen {
 
         restartButton = new TextButton(100, 150, "RESTART");
         menuButton = new TextButton(700, 150, "MENU");
-        backGround = new MovingBackGround("restart_bg.png");
+        backGround = new MovingBackGround("Menu_BG.png");
         point = 0;
         pointCounter = new PointCounter(750, 530);
     }
