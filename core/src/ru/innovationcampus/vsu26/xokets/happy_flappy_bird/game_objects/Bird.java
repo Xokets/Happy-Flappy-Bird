@@ -11,8 +11,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.IntFunction;
 
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame;
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.utils.FrameCounter;
@@ -30,6 +34,7 @@ public class Bird {
     private final List<Texture> birdTiles = new ArrayList<>();
     private final List<Texture> birdEyeTiles = new ArrayList<>();
     private final List<Texture> birdDyeTiles = new ArrayList<>();
+    private static Set<File> sorted;
     private float x;
     private float y;
     private int width;
@@ -59,8 +64,19 @@ public class Bird {
         birdEyeTiles.add(new Texture(TEXTURE_PATH + "eye0002.png"));
         birdEyeTiles.add(new Texture(TEXTURE_PATH + "eye0003.png"));
         birdEyeTiles.add(new Texture(TEXTURE_PATH + "eye0004.png"));
+        List<File> fileList = new ArrayList<>();
+        if (sorted == null) {
+            sorted = new TreeSet<>();
+            for (File file : Gdx.files.internal("assets/BirdTiles/default/dye_animation").file().listFiles()) {
+                fileList.add(file);
+            }
 
-        for (File file : Gdx.files.internal("assets/BirdTiles/default/dye_animation").file().listFiles()) {
+            if (sorted.size() > 0) {
+            }
+            sorted.addAll(fileList);
+        }
+        for (File file : sorted) {
+            System.out.println(file.getName());
             birdDyeTiles.add(new Texture("BirdTiles/default/dye_animation/" + file.getName()));
         }
         frameCounter = new FrameCounter(birdTiles.size() - 1, 3);

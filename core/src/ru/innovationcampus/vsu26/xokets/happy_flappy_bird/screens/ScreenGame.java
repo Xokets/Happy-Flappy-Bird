@@ -38,6 +38,7 @@ public class ScreenGame implements Screen {
     public final List<Tube> tubeList = new ArrayList<>();
     public ScreenGame(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
+        bird = new Bird(SCR_HEIGHT / 2, myGdxGame);
         gameBG.add(new MovingBackGround("GameBG/Game_BG_SKY.png"));
         gameBG.add(new MovingBackGround("GameBG/Game_BG_Clouds.png"));
         gameBG.add(new MovingBackGround("GameBG/Game_BG_Back_mount.png"));
@@ -53,7 +54,7 @@ public class ScreenGame implements Screen {
 
     @Override
     public void show() {
-        bird = new Bird(SCR_HEIGHT / 2, myGdxGame);
+        bird = new Bird(myGdxGame);
         initTubes();
         point = 0;
         pointCounter = new PointCounter(SCR_WIDTH - POINT_COUNTER_MARGIN_RIGHT, SCR_HEIGHT - POINT_COUNTER_MARGIN_TOP);
@@ -92,7 +93,6 @@ public class ScreenGame implements Screen {
                 myGdxGame.batch.draw(sun, 10, SCR_HEIGHT - sun.getHeight() - 10);
             }
         }
-//        backGround.draw(myGdxGame.batch);
         for (Tube tube : tubeList) {
             tube.move(delta);
             if (tube.isHit(bird)) {
@@ -142,7 +142,6 @@ public class ScreenGame implements Screen {
 
     @Override
     public void dispose() {
-//        backGround.dispose();
         sun.dispose();
         for (MovingBackGround element : gameBG) {
             element.dispose();

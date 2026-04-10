@@ -22,10 +22,12 @@ public class Tube {
     private float distanceBetweenTubes;
     private float gapY;
     private int gapHeight;
+    private float acceleration;
     private float accumulator;
     private boolean isPointReceived;
 
     public Tube(int tubeCount, int tubeIdx) {
+        acceleration = 0;
         int id = tubeIdx + 1;
         gapHeight = 410;
         gapY = (float) gapHeight / 2 + PADDING + rand.nextInt(SCR_HEIGHT - 2 * (PADDING + gapHeight / 2));
@@ -41,7 +43,8 @@ public class Tube {
     public void move(float delta) {
         accumulator += delta;
         while (accumulator >= FIXED_TIME_STEP) {
-            x -= SPEED_X;
+            acceleration += 0.001;
+            x -= SPEED_X + acceleration;
             if (x < -width) {
                 isPointReceived = false;
                 x = SCR_WIDTH + distanceBetweenTubes;
