@@ -1,11 +1,9 @@
 package ru.innovationcampus.vsu26.xokets.happy_flappy_bird.components;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class TextButton extends Button {
     private BitmapFont font;
@@ -14,10 +12,8 @@ public class TextButton extends Button {
     private float textX, textY;
     private float textWidth, textHeight;
 
-    private static final String TEXTURE_PATH = "Buttons/";
-
     public TextButton(float x, float y, String text) {
-        super(x, y, TEXTURE_PATH + "Text_Button_Texture.png");
+        super(x, y, "Text_Button_Texture.png");
         this.text = text;
 
         font = new BitmapFont();
@@ -35,7 +31,7 @@ public class TextButton extends Button {
         this(0, 0, text);
     }
     @Override
-    public void draw(SpriteBatch batch) {
+    public void draw(Batch batch) {
         super.draw(batch);
         font.draw(batch, text, textX, textY);
     }

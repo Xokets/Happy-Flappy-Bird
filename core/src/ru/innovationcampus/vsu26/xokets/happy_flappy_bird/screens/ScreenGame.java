@@ -4,7 +4,6 @@ import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame.SCR_H
 import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame.SCR_WIDTH;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,16 +20,20 @@ import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.components.PointCounte
 
 public class ScreenGame implements Screen {
 
+    public static final float FIXED_TIME_STEP = 0.0167f;
+    public static final int SPEED_X = 10;
+    public static final int TUBES_COUNT = 3;
+    public static final int POINT_COUNTER_MARGIN_TOP = 60;
+    public static final int POINT_COUNTER_MARGIN_RIGHT = 400;
+    public static final int BIRD_WIDTH = 200;
+    public static final int BIRD_HEIGHT = 150;
+
+
     private final MyGdxGame myGdxGame;
 
 
     public int point;
     public boolean isGameOver;
-    public static final float FIXED_TIME_STEP = 0.0167f;
-    public static final int SPEED_X = 10;
-    public static final int TUBES_COUNT = 3;
-    private static final int POINT_COUNTER_MARGIN_TOP = 60;
-    private static final int POINT_COUNTER_MARGIN_RIGHT = 400;
     private final List<MovingBackGround> gameBG = new ArrayList<>();
     public Bird bird;
     public Texture sun;
@@ -38,7 +41,7 @@ public class ScreenGame implements Screen {
     public final List<Tube> tubeList = new ArrayList<>();
     public ScreenGame(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
-        bird = new Bird(SCR_HEIGHT / 2, myGdxGame);
+        bird = new Bird((float) SCR_HEIGHT / 2, BIRD_WIDTH, BIRD_HEIGHT, myGdxGame);
         gameBG.add(new MovingBackGround("GameBG/Game_BG_SKY.png"));
         gameBG.add(new MovingBackGround("GameBG/Game_BG_Clouds.png"));
         gameBG.add(new MovingBackGround("GameBG/Game_BG_Back_mount.png"));
@@ -49,17 +52,16 @@ public class ScreenGame implements Screen {
             }
             gameBG.get(i).setSpeed(i);
         }
-        sun = new Texture("BackGround/GameBG/Game_BG_Sun1.png");
+        sun = new Texture("BackGround/GameBG/Game_BG_Sun.png");
     }
 
     @Override
     public void show() {
-        bird = new Bird(myGdxGame);
         initTubes();
         point = 0;
         pointCounter = new PointCounter(SCR_WIDTH - POINT_COUNTER_MARGIN_RIGHT, SCR_HEIGHT - POINT_COUNTER_MARGIN_TOP);
-        bird.placeOnStart();
         isGameOver = false;
+        bird.placeOnStart((float) SCR_HEIGHT / 2, BIRD_WIDTH, BIRD_HEIGHT);
     }
 
     @Override
@@ -82,7 +84,9 @@ public class ScreenGame implements Screen {
         for (MovingBackGround element : gameBG) {
             element.move(delta);
         }
-        bird.fly(delta);
+        if (!isGameOver) {
+            bird.fly(delta);
+        }
         ScreenUtils.clear(Color.BLACK);
         myGdxGame.camera.update();
         myGdxGame.batch.setProjectionMatrix(myGdxGame.camera.combined);

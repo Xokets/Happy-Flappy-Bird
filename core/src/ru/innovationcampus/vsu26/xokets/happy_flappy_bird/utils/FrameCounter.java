@@ -72,4 +72,8 @@ public class FrameCounter {
             return false;
         }
     }
+    public void setToStart() {
+        frame = 0;
+        counter = 0;
+    }
 }

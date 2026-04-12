@@ -1,7 +1,7 @@
 package ru.innovationcampus.vsu26.xokets.happy_flappy_bird.components;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 public class IconButton extends Button {
     private Texture icon;
@@ -13,21 +13,21 @@ public class IconButton extends Button {
     private boolean state;
     private Boolean isOpen;
 
-    public IconButton(float x, float y, String notSelectedStateTexturePath, String selectedStateTexturePath, String iconPath) {
-        super(x, y, notSelectedStateTexturePath);
-        notSelectedTexture = new Texture(notSelectedStateTexturePath);
-        selectedTexture = new Texture(selectedStateTexturePath);
+    public IconButton(float x, float y, String notSelectedStateTextureName, String selectedStateTextureName, String iconPath) {
+        super(x, y, notSelectedStateTextureName);
+        notSelectedTexture = new Texture(BUTTON_TEXTURE_PATH + notSelectedStateTextureName);
+        selectedTexture = new Texture(BUTTON_TEXTURE_PATH + selectedStateTextureName);
         iconWidth = getWidth() / 2;
         iconHeight = getHeight() / 2;
         icon = new Texture(iconPath);
         iconX = x + (getWidth() - iconWidth) / 2;
         iconY = y + (getHeight() - iconHeight) / 2;
         isOpen = false;
-        closedMark = new Texture("Buttons/Closed_Mark.png");
+        closedMark = new Texture(BUTTON_TEXTURE_PATH + "Closed_Mark.png");
     }
 
     @Override
-    public void draw(SpriteBatch batch) {
+    public void draw(Batch batch) {
         super.draw(batch);
         batch.draw(icon, iconX, iconY, iconWidth, iconHeight);
         if (!isOpen) {

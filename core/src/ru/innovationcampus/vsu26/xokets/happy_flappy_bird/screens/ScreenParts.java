@@ -27,9 +27,9 @@ public class ScreenParts implements Screen {
     private MovingBackGround backGround;
     private Button menuButton;
     private final List<IconButton> parts = new ArrayList<>();
-    private final IconButton partHeadPilotHat = new IconButton(0, 0, "Buttons/Button_PartIcon_StateNotSelected.png", "Buttons/Button_PartIcon_StateSelected.png", TEXTURE_PATH + "Part_Head_PilotHat.png");
-    private final IconButton partHeadSunglasses = new IconButton(0, 0, "Buttons/Button_PartIcon_StateNotSelected.png", "Buttons/Button_PartIcon_StateSelected.png", TEXTURE_PATH + "Part_Head_Sunglasses.png");
-    private final IconButton partHeadCap = new IconButton(0, 0, "Buttons/Button_PartIcon_StateNotSelected.png", "Buttons/Button_PartIcon_StateSelected.png", TEXTURE_PATH + "Part_Head_Cap.png");
+    private final IconButton partHeadPilotHat = new IconButton(0, 0, "Button_PartIcon_StateNotSelected.png", "Button_PartIcon_StateSelected.png", TEXTURE_PATH + "Part_Head_PilotHat.png");
+    private final IconButton partHeadSunglasses = new IconButton(0, 0, "Button_PartIcon_StateNotSelected.png", "Button_PartIcon_StateSelected.png", TEXTURE_PATH + "Part_Head_Sunglasses.png");
+    private final IconButton partHeadCap = new IconButton(0, 0, "Button_PartIcon_StateNotSelected.png", "Button_PartIcon_StateSelected.png", TEXTURE_PATH + "Part_Head_Cap.png");
 
     public ScreenParts(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
@@ -48,6 +48,7 @@ public class ScreenParts implements Screen {
 
     @Override
     public void show() {
+        myGdxGame.applyData();
         partHeadPilotHat.setOpen(myGdxGame.hasPilotHat);
         partHeadSunglasses.setOpen(myGdxGame.hasSunglasses);
         partHeadCap.setOpen(myGdxGame.hasCap);

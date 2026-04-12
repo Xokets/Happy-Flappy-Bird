@@ -1,18 +1,21 @@
 package ru.innovationcampus.vsu26.xokets.happy_flappy_bird.components;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
-public abstract class Button {
+import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.GameElement;
+
+public abstract class Button implements GameElement {
+    public static final String BUTTON_TEXTURE_PATH = "Buttons/";
     private Texture texture;
     private float x, y;
     private float width, height;
 
-    public Button(float x, float y, String texturePath) {
+    public Button(float x, float y, String textureName) {
         this.x = x;
         this.y = y;
 
-        texture = new Texture(texturePath);
+        texture = new Texture(BUTTON_TEXTURE_PATH + textureName);
         width = texture.getWidth();
         height = texture.getHeight();
     }
@@ -20,11 +23,11 @@ public abstract class Button {
     public boolean isTouch(int tx, int ty) {
         return tx >= x && tx <= x + width && ty >= y && ty <= y + height;
     }
-
-    public void draw(SpriteBatch batch) {
+    @Override
+    public void draw(Batch batch) {
         batch.draw(texture, x, y, width, height);
     }
-
+    @Override
     public void dispose() {
         texture.dispose();
     }

@@ -3,7 +3,6 @@ package ru.innovationcampus.vsu26.xokets.happy_flappy_bird;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -51,7 +50,7 @@ public class MyGdxGame extends Game {
 		screenParts.dispose();
 	}
 
-	private void applyData() {
+	public void applyData() {
 		String pref = "has_pilot_hat";
 		if (!data.contains(pref)) {
 			data.putBoolean(pref, false);
@@ -68,11 +67,5 @@ public class MyGdxGame extends Game {
 		}
 		hasCap = data.getBoolean(pref);
 		data.flush();
-	}
-
-	@Override
-	public void setScreen(Screen screen) {
-		super.setScreen(screen);
-		applyData();
 	}
 }
