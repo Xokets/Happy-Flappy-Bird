@@ -4,12 +4,14 @@ import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame.SCR_H
 import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.screens.ScreenGame.FIXED_TIME_STEP;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -58,18 +60,17 @@ public class Bird implements GameElement {
         birdTiles.add(new Texture(TEXTURE_PATH + "Bird0002.png"));
         birdTiles.add(new Texture(TEXTURE_PATH + "Bird0003.png"));
         birdTiles.add(new Texture(TEXTURE_PATH + "Bird0004.png"));
-        birdEyeTiles.add(new Texture(TEXTURE_PATH + "eye0001.png"));
-        birdEyeTiles.add(new Texture(TEXTURE_PATH + "eye0002.png"));
-        birdEyeTiles.add(new Texture(TEXTURE_PATH + "eye0003.png"));
-        birdEyeTiles.add(new Texture(TEXTURE_PATH + "eye0004.png"));
+        birdEyeTiles.add(new Texture(TEXTURE_PATH + "Eye0001.png"));
+        birdEyeTiles.add(new Texture(TEXTURE_PATH + "Eye0002.png"));
+        birdEyeTiles.add(new Texture(TEXTURE_PATH + "Eye0003.png"));
+        birdEyeTiles.add(new Texture(TEXTURE_PATH + "Eye0004.png"));
 
         //sorting dye-tile files
-        Set<File> sorted = new TreeSet<>();
-        sorted.addAll(Arrays.asList(Gdx.files.internal("assets/" + TEXTURE_PATH + "dye_animation").file().listFiles()));
-        for (File file : sorted) {
-            birdDyeTiles.add(new Texture(TEXTURE_PATH + "dye_animation/" + file.getName()));
+        FileHandle[] files = Gdx.files.internal("assets/" + TEXTURE_PATH + "dye_animation/").list();
+//        Arrays.sort(files, (file, file2) -> file.getName().compareTo(file2.getName()));
+        for (FileHandle file : files) {
+            birdDyeTiles.add(new Texture(TEXTURE_PATH + "dye_animation/" + file.file().getName()));
         }
-
         //initialization of framecounters
         frameCounter = new FrameCounter(birdTiles.size() - 1, 3);
         eyeFrameCounter = new FrameCounter(birdEyeTiles.size() - 1);

@@ -29,8 +29,6 @@ public class MyGdxGame extends Game {
 
 	@Override
 	public void create() {
-		data = Gdx.app.getPreferences("HappyFlappyBirdData");
-		applyData();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCR_WIDTH, SCR_HEIGHT);
@@ -51,6 +49,9 @@ public class MyGdxGame extends Game {
 	}
 
 	public void applyData() {
+		if (data == null) {
+			data = Gdx.app.getPreferences("HappyFlappyBirdData");
+		}
 		String pref = "has_pilot_hat";
 		if (!data.contains(pref)) {
 			data.putBoolean(pref, false);
