@@ -1,27 +1,22 @@
 package ru.innovationcampus.vsu26.xokets.happy_flappy_bird.game_objects;
 
 import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame.SCR_HEIGHT;
-import static ru.innovationcampus.vsu26.xokets.happy_flappy_bird.screens.ScreenGame.FIXED_TIME_STEP;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Disposable;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-import java.util.TreeSet;
 
-import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.GameElement;
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.MyGdxGame;
 import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.utils.FrameCounter;
 
-public class Bird implements GameElement {
+public class Bird implements Disposable {
     private static final int[] HEAD_PART_PIVOT_POINT = {85, 100};
     public static final float X_POS = 300;
     private static final float JUMP_FORCE = 6.1f;
@@ -43,7 +38,6 @@ public class Bird implements GameElement {
     private int height;
     private float velocityY;
     private Texture texture;
-    private float accumulator;
     private final MyGdxGame myGdxGame;
     private boolean isDying;
     private boolean isDye;
@@ -66,10 +60,10 @@ public class Bird implements GameElement {
         birdEyeTiles.add(new Texture(TEXTURE_PATH + "Eye0004.png"));
 
         //sorting dye-tile files
-        FileHandle[] files = Gdx.files.internal("assets/" + TEXTURE_PATH + "dye_animation/").list();
-//        Arrays.sort(files, (file, file2) -> file.getName().compareTo(file2.getName()));
+        FileHandle[] files = Gdx.files.internal(TEXTURE_PATH + "dye_animation").list();
+        Arrays.sort(files, (file, file2) -> file.file().getName().compareTo(file2.file().getName()));
         for (FileHandle file : files) {
-            birdDyeTiles.add(new Texture(TEXTURE_PATH + "dye_animation/" + file.file().getName()));
+            birdDyeTiles.add(new Texture(file));
         }
         //initialization of framecounters
         frameCounter = new FrameCounter(birdTiles.size() - 1, 3);
@@ -78,23 +72,16 @@ public class Bird implements GameElement {
         placeOnStart(y, width, height);
     }
 
-    public void fly(float delta) {
-        accumulator += delta;
-        time += delta;
-        //If delta is too long physics must be reproduced repeatedly. If delta is too small physics cannot be reproduced while delta is not long
-        while (accumulator >= FIXED_TIME_STEP) {
-            //fly animation must starts when bird is jumping
-            if (velocityY > 0) {
-                frameCounter.nextFrame();
-            }
-            velocityY -= MyGdxGame.G * time;
-            y += velocityY;
-            accumulator -= FIXED_TIME_STEP;
-            if (eyeFrameCounter.getFrame() > 0) {
-                eyeFrameCounter.nextFrame();
-            } else if (rand.nextInt(100) < 1) {
-                eyeFrameCounter.nextFrame();
-            }
+    public void fly() {
+        if (velocityY > 0) {
+            frameCounter.nextFrame();
+        }
+        velocityY -= MyGdxGame.G * time;
+        y += velocityY;
+        if (eyeFrameCounter.getFrame() > 0) {
+            eyeFrameCounter.nextFrame();
+        } else if (rand.nextInt(100) < 1) {
+            eyeFrameCounter.nextFrame();
         }
     }
 
@@ -105,7 +92,7 @@ public class Bird implements GameElement {
             velocityY = JUMP_FORCE;
         }
     }
-    @Override
+
     public void draw(Batch batch) {
         if (velocityY < 0 && frameCounter.getFrame() != 0) frameCounter.previousFrame();
         texture = birdTiles.get(frameCounter.getFrame());
@@ -179,7 +166,6 @@ public class Bird implements GameElement {
 
         //initialization of "fixed time step" variables
         time = 0;
-        accumulator = 0;
 
 
         this.y = y;
@@ -190,6 +176,15 @@ public class Bird implements GameElement {
         dyeFrameCounter.setToStart();
         eyeFrameCounter.setToStart();
     }
+
+    public float getTime() {
+        return time;
+    }
+
+    public void setTime(float time) {
+        this.time = time;
+    }
+
     @Override
     public void dispose() {
         texture.dispose();

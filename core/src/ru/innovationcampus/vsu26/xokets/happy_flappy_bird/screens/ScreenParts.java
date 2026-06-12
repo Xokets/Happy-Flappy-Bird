@@ -48,7 +48,6 @@ public class ScreenParts implements Screen {
 
     @Override
     public void show() {
-        myGdxGame.applyData();
         partHeadPilotHat.setOpen(myGdxGame.hasPilotHat);
         partHeadSunglasses.setOpen(myGdxGame.hasSunglasses);
         partHeadCap.setOpen(myGdxGame.hasCap);
@@ -91,7 +90,6 @@ public class ScreenParts implements Screen {
 
     @Override
     public void pause() {
-
     }
 
     @Override

@@ -3,8 +3,9 @@ package ru.innovationcampus.vsu26.xokets.happy_flappy_bird.components;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Disposable;
 
-public class PointCounter {
+public class PointCounter implements Disposable {
     private float x;
     private float y;
     private BitmapFont font;

@@ -21,7 +21,8 @@ import ru.innovationcampus.vsu26.xokets.happy_flappy_bird.components.PointCounte
 public class ScreenGame implements Screen {
 
     public static final float FIXED_TIME_STEP = 0.0167f;
-    public static final int SPEED_X = 10;
+    public static final float ACCELERATION_STEP = 0.02f;
+    public static final int TUBE_SPEED = 10;
     public static final int TUBES_COUNT = 3;
     public static final int POINT_COUNTER_MARGIN_TOP = 60;
     public static final int POINT_COUNTER_MARGIN_RIGHT = 400;
@@ -32,6 +33,8 @@ public class ScreenGame implements Screen {
     private final MyGdxGame myGdxGame;
 
 
+    private float acceleration;
+    private float accumulator;
     public int point;
     public boolean isGameOver;
     private final List<MovingBackGround> gameBG = new ArrayList<>();
@@ -39,6 +42,7 @@ public class ScreenGame implements Screen {
     public Texture sun;
     public PointCounter pointCounter;
     public final List<Tube> tubeList = new ArrayList<>();
+
     public ScreenGame(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
         bird = new Bird((float) SCR_HEIGHT / 2, BIRD_WIDTH, BIRD_HEIGHT, myGdxGame);
@@ -50,7 +54,7 @@ public class ScreenGame implements Screen {
             if (i == 1) {
                 gameBG.get(i).setSpeed(0);
             }
-            gameBG.get(i).setSpeed(i);
+            gameBG.get(i).setSpeed(i * 0.75f);
         }
         sun = new Texture("BackGround/GameBG/Game_BG_Sun.png");
     }
@@ -59,6 +63,8 @@ public class ScreenGame implements Screen {
     public void show() {
         initTubes();
         point = 0;
+        acceleration = 0;
+        accumulator = 0;
         pointCounter = new PointCounter(SCR_WIDTH - POINT_COUNTER_MARGIN_RIGHT, SCR_HEIGHT - POINT_COUNTER_MARGIN_TOP);
         isGameOver = false;
         bird.placeOnStart((float) SCR_HEIGHT / 2, BIRD_WIDTH, BIRD_HEIGHT);
@@ -66,8 +72,29 @@ public class ScreenGame implements Screen {
 
     @Override
     public void render(float delta) {
+        accumulator += delta;
+        bird.setTime(bird.getTime() + delta);
+        while (accumulator >= FIXED_TIME_STEP) {
+
+            accumulator -= FIXED_TIME_STEP;
+
+            for (MovingBackGround element : gameBG) {
+                element.move(acceleration);
+            }
+            if (!isGameOver) {
+                bird.fly();
+            }
+            for (Tube tube : tubeList) {
+                tube.move(acceleration);
+            }
+
+        }
+        if (Gdx.input.justTouched()) {
+            bird.onClick();
+        }
         if (isGameOver) {
             bird.kill();
+            myGdxGame.screenRestart.setPoint(point);
             if (bird.isDye()) {
                 myGdxGame.screenRestart.setPoint(point);
                 myGdxGame.setScreen(myGdxGame.screenRestart);
@@ -77,15 +104,6 @@ public class ScreenGame implements Screen {
             isGameOver = true;
             myGdxGame.screenRestart.setPoint(point);
             myGdxGame.setScreen(myGdxGame.screenRestart);
-        }
-        if (Gdx.input.justTouched()) {
-            bird.onClick();
-        }
-        for (MovingBackGround element : gameBG) {
-            element.move(delta);
-        }
-        if (!isGameOver) {
-            bird.fly(delta);
         }
         ScreenUtils.clear(Color.BLACK);
         myGdxGame.camera.update();
@@ -98,11 +116,11 @@ public class ScreenGame implements Screen {
             }
         }
         for (Tube tube : tubeList) {
-            tube.move(delta);
             if (tube.isHit(bird)) {
                 isGameOver = true;
             } else if (tube.needAddPoint(bird) && !isGameOver) {
                 point++;
+                if (acceleration < 8.5f) acceleration += ACCELERATION_STEP;
             }
             tube.draw(myGdxGame.batch);
             pointCounter.draw(myGdxGame.batch, point);
@@ -110,9 +128,18 @@ public class ScreenGame implements Screen {
         bird.draw(myGdxGame.batch);
         myGdxGame.batch.end();
         switch (point) {
-            case 25: myGdxGame.data.putBoolean("has_cap", true); break;
-            case 50: myGdxGame.data.putBoolean("has_pilot_hat", true); break;
-            case 100: myGdxGame.data.putBoolean("has_sunglasses", true); break;
+            case 25:
+                myGdxGame.data.putBoolean("has_cap", true);
+                myGdxGame.applyData();
+                break;
+            case 50:
+                myGdxGame.data.putBoolean("has_pilot_hat", true);
+                myGdxGame.applyData();
+                break;
+            case 100:
+                myGdxGame.data.putBoolean("has_sunglasses", true);
+                myGdxGame.applyData();
+                break;
         }
     }
 
@@ -133,14 +160,12 @@ public class ScreenGame implements Screen {
     }
 
     private void initTubes() {
-        if (isGameOver) {
-            for (Tube tube : tubeList) {
-                tube.dispose();
-            }
-            tubeList.clear();
+        for (Tube tube : tubeList) {
+            tube.dispose();
         }
+        tubeList.clear();
         for (int i = 0; i < TUBES_COUNT; i++) {
-            tubeList.add(new Tube(TUBES_COUNT, i));
+            tubeList.add(new Tube(TUBES_COUNT, i, TUBE_SPEED));
         }
     }
 
